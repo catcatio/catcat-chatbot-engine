@@ -1,0 +1,27 @@
+{
+  "name": "bots-template",
+  "version": "1.0.1",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "predev:docker": "npm install",
+    "dev:docker": "npm run dev",
+    "dev": "nodemon --watch src --ext ts,js,json --exec \"ts-node .\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@line/bot-sdk": "^6.2.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
+  }
+}
