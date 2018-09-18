@@ -1,11 +1,16 @@
 require('dotenv/config')
 
-const config = require('./config')
-const server = require('./server')
+import { config } from './config'
+import server from './server'
 
-server(config).start()
+const serverInstace = server(config)
+serverInstace.then(server => server.start()
   .catch(err => {
     console.error(err)
-    console.error(err.stack)
     process.exit(1)
-  })
+  }))
+
+serverInstace.then(server => process.on('SIGTERM', () => {
+  console.info('SIGTERM signal received.');
+  server.stop()
+}))

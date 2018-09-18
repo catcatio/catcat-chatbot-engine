@@ -1,31 +1,44 @@
-let line = null
-
 const initApi = (config) => {
   const { Router } = require('express')
-  const { Client } = require('@line/bot-sdk')
-  const { json } = require('body-parser')
+  const { Client, middleware } = require('@line/bot-sdk')
   const lineClient = new Client(config)
-  const languageDetector = require('../languageDetector')
-  const eventHandlers = require('./eventHandlers')(lineClient, languageDetector)
+  const eventHandlers = require('./eventHandlers')(lineClient)
 
-  const line = Router()
-  line.use(json())
-  line.use('/', (req, res) => {
-    const events = req.body.events
-    events && events.forEach(eventHandlers)
-    res.send('OK')
+  const router = Router()
+  const lineMiddleware = middleware(config)
+  router.use((req, res, next) => {
+    try {
+      const nextProxy = (err) => {
+        if (err instanceof Error) {
+          console.log(err.message)
+          res.status(500).send(err.message)
+        } else {
+          next()
+        }
+      }
+      // Check Line signature and convert body to JSON
+      lineMiddleware(req, res, nextProxy)
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
   })
-  return line
+
+  router.use('/', (req, res) => {
+    const events = req.body && req.body.events
+    events && events.forEach(eventHandlers)
+    res.send('OK') // end of request
+  })
+  return router
 }
 
-export = (config) => (req, res) => {
+let line = null
+
+export = (config) => {
   try {
-    if (!line) line = initApi(config)
-
-    return line(req, res)
+    return line || (line = initApi(config))
   } catch (error) {
-    console.log(error)
-    console.log(error.stack)
+    console.error(error)
+    console.error(error.stack)
   }
-
 }

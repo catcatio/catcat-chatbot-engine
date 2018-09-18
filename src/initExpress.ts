@@ -1,15 +1,18 @@
-const express = require('express')
+import * as express from 'express'
+import { Server } from 'http'
+import { IConfig } from './config';
 
-export = ({ port }) => {
-  const app = express()
-  port = port || 3000
-  app.listen(port, (err) => {
-    if (err) {
-      return console.log(`Failed to start server on port ${port}`, err)
-    }
-    console.log(`Listening http://localhost:${port}`)
+export = (config :IConfig) =>
+  new Promise<{ app: express.Express, server: Server }>((resolve, reject) => {
+    const app = express()
+
+    const server = app.listen(config.port, (err: Error) => {
+      if (err) {
+        console.log(`Failed to start server on port ${config.port}`, err)
+        reject(err)
+      }
+
+      console.log(`Listening http://localhost:${config.port}`)
+      resolve({ app, server })
+    })
   })
-
-  return app
-}
-

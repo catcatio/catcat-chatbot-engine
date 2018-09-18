@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": false,
     "experimentalDecorators": true,
     "noEmitOnError": false,
     "moduleResolution": "node",
@@ -11,9 +12,18 @@
     "inlineSources": true,
     "jsx": "react",
     "outDir": "lib",
+    "baseUrl": ".",
     "lib": [
       "es6",
       "es7",
+    ],
+    "paths": {
+      "@bots/utils/*": [
+        "src/utils/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types"
     ]
   },
   "exclude": [
