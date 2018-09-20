@@ -1,11 +1,14 @@
 const eventType = 'message'
 
-const handler = (lineClient, languageDetector) =>
-  async (event) => {
-    console.log(eventType)
-    lineClient.replyMessage(event.replyToken, { type: 'text', text: eventType })
+const handler = () =>
+  (event) => {
+    // TODO: to handle others type of messages
+    return {
+      replyToken: event.replyToken,
+      message: event.message.text,
+      eventType
+    }
   }
-
 export = {
   handler,
   eventType

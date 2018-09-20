@@ -1,4 +1,6 @@
-export = (lineClient) => {
+import randomString from '../../../utils/randomString'
+
+export = () => {
   const messageEventHandler = require('./messageEventHandler')
   const followEventHandler = require('./followEventHandler')
   const unfollowEventHandler = require('./unfollowEventHandler')
@@ -7,16 +9,22 @@ export = (lineClient) => {
   const defaultEventHandler = require('./defaultEventHandler')
 
   const eventHandlers = {
-    [messageEventHandler.eventType]: messageEventHandler.handler(lineClient),
-    [followEventHandler.eventType]: followEventHandler.handler(lineClient),
-    [unfollowEventHandler.eventType]: unfollowEventHandler.handler(lineClient),
-    [postbackEventHandler.eventType]: postbackEventHandler.handler(lineClient),
-    [beaconEventHandler.eventType]: beaconEventHandler.handler(lineClient)
+    [messageEventHandler.eventType]: messageEventHandler.handler(),
+    [followEventHandler.eventType]: followEventHandler.handler(),
+    [unfollowEventHandler.eventType]: unfollowEventHandler.handler(),
+    [postbackEventHandler.eventType]: postbackEventHandler.handler(),
+    [beaconEventHandler.eventType]: beaconEventHandler.handler()
   }
 
   const isSystemVerificationEvent = ({replyToken}) => {
     return replyToken === '00000000000000000000000000000000' ||
       replyToken === 'ffffffffffffffffffffffffffffffff'
+  }
+
+  const getUserId = (source) => {
+    return source && source.userId
+      ? source.userId
+      : `???${randomString()}`
   }
 
   return (event) => {

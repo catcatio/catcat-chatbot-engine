@@ -1,8 +1,9 @@
 const eventType = 'unfollow'
 
-const handler = (lineClient) =>
-  async (event) => {
-    console.log(eventType)
+const handler = () =>
+  (event) => {
+    console.error(eventType, event)
+    return null
   }
 
 export = {

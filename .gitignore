@@ -2,4 +2,9 @@ node_modules
 .DS_Store
 .env
 
+coverage
+.nyc_output
+*.http
+
 package-lock.json
+serviceAccountKey.json

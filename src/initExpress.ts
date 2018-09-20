@@ -4,6 +4,7 @@ import { IConfig } from './config';
 
 export = (config :IConfig) =>
   new Promise<{ app: express.Express, server: Server }>((resolve, reject) => {
+    console.log('init express')
     const app = express()
 
     const server = app.listen(config.port, (err: Error) => {

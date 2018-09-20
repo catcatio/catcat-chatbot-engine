@@ -10,11 +10,7 @@ export default async (config: IConfig) => {
     const { app, server } = await initExpress(config)
     _server = server
     app.use(routers(config))
-
-    app.use(function (err, req, res, next) {
-      console.error(err.stack)
-      res.status(500).send('Something broke!')
-    })
+    console.log('server started')
   }
 
   const stop = async () => {

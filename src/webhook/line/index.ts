@@ -1,42 +1,45 @@
-const initApi = (config) => {
+import sessionIdHelper from "./sessionIdHelper";
+
+const initApi = (config, messageHandlerAsync) => {
   const { Router } = require('express')
   const { Client, middleware } = require('@line/bot-sdk')
+
+  const { json } = require('body-parser')
   const lineClient = new Client(config)
-  const eventHandlers = require('./eventHandlers')(lineClient)
+  const eventHandlers = require('./eventHandlers')()
+  const middlewareWrapper = require('./middlewareWrapper').default
+  const responder = require('./responder')
 
   const router = Router()
-  const lineMiddleware = middleware(config)
-  router.use((req, res, next) => {
-    try {
-      const nextProxy = (err) => {
-        if (err instanceof Error) {
-          console.log(err.message)
-          res.status(500).send(err.message)
-        } else {
-          next()
-        }
-      }
-      // Check Line signature and convert body to JSON
-      lineMiddleware(req, res, nextProxy)
-    } catch (error) {
-      console.log(error.message)
-      throw error
-    }
-  })
+  // const lineMiddleware = middlewareWrapper(middleware(config))
+  const lineMiddleware = middlewareWrapper(json())
 
+  router.use(lineMiddleware)
   router.use('/', (req, res) => {
-    const events = req.body && req.body.events
-    events && events.forEach(eventHandlers)
-    res.send('OK') // end of request
+    let events = [].concat.apply([], req.body.events);
+    let lnHandle = (parsedMessage, originalMessage) => {
+      if (parsedMessage) {
+        let replyToken = parsedMessage.replyToken;
+        parsedMessage.sessionId = sessionIdHelper.makeSessionId(originalMessage)
+        parsedMessage.source = 'line'
+
+        return messageHandlerAsync(parsedMessage, originalMessage)
+          .then(response => responder(replyToken, response, lineClient))
+          .catch(console.error);
+      }
+    };
+
+    return Promise.all(events.map(event => lnHandle(eventHandlers(event), event)))
+      .then(() => res.send('OK')) // end of request)
   })
   return router
 }
 
 let line = null
 
-export = (config) => {
-  try {
-    return line || (line = initApi(config))
+export = (config, messageHandlerAsync) => {
+  try { // lazy loading
+    return line || (line = initApi(config, messageHandlerAsync))
   } catch (error) {
     console.error(error)
     console.error(error.stack)

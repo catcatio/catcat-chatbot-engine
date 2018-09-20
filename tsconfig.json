@@ -5,6 +5,7 @@
     "noEmitOnError": false,
     "moduleResolution": "node",
     "target": "es5",
+    "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "declaration": false,
     "skipDefaultLibCheck": true,
@@ -35,5 +36,5 @@
   "include": [
     "src"
   ],
-  "compileOnSave": true
+  "compileOnSave": true,
 }

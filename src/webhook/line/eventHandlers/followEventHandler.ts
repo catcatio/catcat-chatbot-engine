@@ -1,9 +1,13 @@
 const eventType = 'follow'
 
-const handler = (lineClient) =>
-  async (event) => {
-    console.log(eventType)
-    lineClient.replyMessage(event.replyToken, { type: 'text', text: eventType })
+const handler = () =>
+  (event) => {
+    console.log(eventType, event)
+    return {
+      replyToken: event.replyToken,
+      message: '',
+      eventType
+    }
   }
 
 export = {
