@@ -9,8 +9,7 @@ const wrapLazyRequestHandler = (requestHandlerModule, messageHandlerAsync, confi
 
 export = (config: IConfig) => {
   if (router) return router
-  const messageHandler = require('./messageHandler')
-
+  const messageHandler = require('./messageHandler')(config)
   const messageHandlerAsync = async (prasedMessage: IParsedMessage, originalMessage: any) => {
     return await messageHandler(prasedMessage, originalMessage) // to ensure messageHandler is a promise
   }

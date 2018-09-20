@@ -3,11 +3,11 @@ import { Translate } from '@google-cloud/translate'
 const detectLanguage = (translate: Translate, text): any => new Promise((resolve, reject) => {
   translate.detect(text, (err, results) => {
     if (err) { reject(err); return }
-    resolve (results)
+    resolve(results)
   })
 })
 
-export = async (text) => {
+export default async (text) => {
   const startTime = Date.now()
 
   const translate = new Translate()

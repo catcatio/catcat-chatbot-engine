@@ -7,28 +7,30 @@ const tryGetErrorMessage = (err) => {
 }
 
 export const lineReply = (replyToken, message, lineClient) => {
-  console.log(message)
-  var messages = [];
+  var messages = []
   if (typeof message === 'string') {
     messages = [{
       text: message,
       type: 'text'
-    }];
+    }]
   } else if (Array.isArray(message)) {
     message.forEach(msg => {
       if (typeof msg === 'string') {
         let singleMessage = {
           text: msg,
           type: 'text'
-        };
-        messages.push(singleMessage);
+        }
+        messages.push(singleMessage)
       } else {
-        messages.push(msg);
+        messages.push(msg)
       }
-    });
+    })
   } else {
-    if (!message || !message.type) throw new Error('Your LINE message is required to have a type');
-    messages = [message];
+    if (!message) throw new Error('You LINE message is empty')
+    if (!message.type) throw new Error('Your LINE message is required to have a type')
+
+    // object type message
+    messages = [message]
   }
 
   return lineClient.replyMessage(replyToken, messages)
@@ -38,4 +40,4 @@ export const lineReply = (replyToken, message, lineClient) => {
 
 }
 
-module.exports = lineReply;
+module.exports = lineReply

@@ -6,7 +6,7 @@ const handler = () =>
     return {
       replyToken: event.replyToken,
       message: '',
-      eventType
+      type: eventType
     }
   }
 

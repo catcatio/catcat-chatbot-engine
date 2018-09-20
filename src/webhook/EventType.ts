@@ -5,5 +5,5 @@ export interface IParsedMessage {
   message?: string,
   type: MessageType,
   userId: string,
-  source: string,
+  source: string
 }

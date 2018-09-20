@@ -16,7 +16,7 @@ export = () => {
     [beaconEventHandler.eventType]: beaconEventHandler.handler()
   }
 
-  const isSystemVerificationEvent = ({replyToken}) => {
+  const isSystemVerificationEvent = ({ replyToken }) => {
     return replyToken === '00000000000000000000000000000000' ||
       replyToken === 'ffffffffffffffffffffffffffffffff'
   }
@@ -30,6 +30,6 @@ export = () => {
   return (event) => {
     if (isSystemVerificationEvent(event)) return
     const eventHandler = eventHandlers[event.type] || defaultEventHandler.handler()
-    return eventHandler(event)
+    return Object.assign({}, { userId: getUserId(event.source) }, eventHandler(event))
   }
 }

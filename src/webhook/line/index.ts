@@ -1,5 +1,3 @@
-import sessionIdHelper from "./sessionIdHelper";
-
 const initApi = (config, messageHandlerAsync) => {
   const { Router } = require('express')
   const { Client, middleware } = require('@line/bot-sdk')
@@ -20,7 +18,6 @@ const initApi = (config, messageHandlerAsync) => {
     let lnHandle = (parsedMessage, originalMessage) => {
       if (parsedMessage) {
         let replyToken = parsedMessage.replyToken;
-        parsedMessage.sessionId = sessionIdHelper.makeSessionId(originalMessage)
         parsedMessage.source = 'line'
 
         return messageHandlerAsync(parsedMessage, originalMessage)
