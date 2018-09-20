@@ -11,7 +11,7 @@ const line: ILineConfig = {
 
 const googleProject = project_id
 const port = parseInt(process.env.PORT || '') || 3000
-const apis = ['webhook']
+const apis = ['webhook', 'fulfillment']
 const providers = ['line']
 
 export const config: IConfig = {

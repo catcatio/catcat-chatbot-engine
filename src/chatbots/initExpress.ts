@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Server } from 'http'
-import { IConfig } from './config';
+import { IConfig } from '../config';
 
 export = (config :IConfig) =>
   new Promise<{ app: express.Express, server: Server }>((resolve, reject) => {

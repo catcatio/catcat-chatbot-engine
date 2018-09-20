@@ -1,5 +1,5 @@
-import { IConfig } from '../config';
 import { IParsedMessage } from './EventType';
+import { IConfig } from '../../config';
 
 let router = null
 
@@ -7,9 +7,8 @@ const wrapLazyRequestHandler = (requestHandlerModule, messageHandlerAsync, confi
   return async (req, res) => require(`./${requestHandlerModule}`)(config, messageHandlerAsync)(req, res)
 }
 
-export = (config: IConfig) => {
+export = (config: IConfig, messageHandler) => {
   if (router) return router
-  const messageHandler = require('./messageHandler')(config)
   const messageHandlerAsync = async (prasedMessage: IParsedMessage, originalMessage: any) => {
     return await messageHandler(prasedMessage, originalMessage) // to ensure messageHandler is a promise
   }

@@ -1,15 +1,15 @@
-import { IConfig } from './config';
+import { IConfig } from '../config';
 
 import { Server } from 'http'
 
-export default async (config: IConfig) => {
+export default async (config: IConfig, { messageHandler, fulfillmentHandler }) => {
   const initExpress = require('./initExpress')
   const routers = require('./routers')
   let _server: Server
   const start = async () => {
     const { app, server } = await initExpress(config)
     _server = server
-    app.use(routers(config))
+    app.use(routers(config, { messageHandler, fulfillmentHandler }))
     console.log('server started')
   }
 

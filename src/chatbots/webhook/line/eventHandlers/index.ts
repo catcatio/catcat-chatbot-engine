@@ -1,5 +1,3 @@
-import randomString from '../../../utils/randomString'
-
 export = () => {
   const messageEventHandler = require('./messageEventHandler')
   const followEventHandler = require('./followEventHandler')
@@ -24,7 +22,7 @@ export = () => {
   const getUserId = (source) => {
     return source && source.userId
       ? source.userId
-      : `???${randomString()}`
+      : `???????`
   }
 
   return (event) => {

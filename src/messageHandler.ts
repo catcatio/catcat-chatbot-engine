@@ -1,8 +1,8 @@
-import { SessionsClient } from 'dialogflow';
-import { IParsedMessage } from "./EventType";
-import languageDetector from '../utils/languageDetector';
-import structjson from '../utils/dialogflow/structjson';
-import { IConfig } from '../config';
+import { SessionsClient } from 'dialogflow'
+import { IConfig } from './config'
+import { IParsedMessage } from './chatbots/webhook/EventType'
+import languageDetector from './utils/languageDetector'
+import structjson from './utils/dialogflow/structjson';
 
 const PLATFORM_UNSPECIFIED = 'PLATFORM_UNSPECIFIED'
 const PLATFORM_LINE = 'LINE'
@@ -66,4 +66,4 @@ export const messageHandler = (config: IConfig) =>
       })
   }
 
-module.exports = messageHandler
+export default messageHandler
