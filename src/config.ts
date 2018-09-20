@@ -13,13 +13,15 @@ const googleProject = project_id
 const port = parseInt(process.env.PORT || '') || 3000
 const apis = ['webhook', 'fulfillment']
 const providers = ['line']
+const imageResizeService = process.env.IMG_RESIZE_SERVICE
 
 export const config: IConfig = {
   port,
   line,
   apis,
   providers,
-  googleProject
+  googleProject,
+  imageResizeService
 }
 
 export interface IConfig {
@@ -27,7 +29,8 @@ export interface IConfig {
   googleProject: string,
   line?: ILineConfig,
   apis: string[],
-  providers: string[]
+  providers: string[],
+  imageResizeService: string
 }
 export interface ILineConfig {
   channelAccessToken: string,

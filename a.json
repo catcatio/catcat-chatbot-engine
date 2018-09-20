@@ -1,0 +1,59 @@
+{
+  "fulfillmentMessages": [
+    {
+      "platform": "PLATFORM_UNSPECIFIED",
+      "text": {
+        "text": [
+          ""
+        ]
+      },
+      "message": "text"
+    }
+  ],
+  "outputContexts": [],
+  "queryText": "view book that one thing",
+  "speechRecognitionConfidence": 0,
+  "action": "books.view",
+  "parameters": {
+    "fields": {
+      "book-name": {
+        "stringValue": "that one thing",
+        "kind": "stringValue"
+      }
+    }
+  },
+  "allRequiredParamsPresent": true,
+  "fulfillmentText": "",
+  "webhookSource": "",
+  "webhookPayload": null,
+  "intent": {
+    "inputContextNames": [],
+    "events": [],
+    "trainingPhrases": [],
+    "outputContexts": [],
+    "parameters": [],
+    "messages": [],
+    "defaultResponsePlatforms": [],
+    "followupIntentInfo": [],
+    "name": "projects/catcat-bookshelf/agent/intents/5c8e42fd-6a4e-4049-8d20-1635cf3687be",
+    "displayName": "books.view",
+    "priority": 0,
+    "isFallback": false,
+    "webhookState": "WEBHOOK_STATE_UNSPECIFIED",
+    "action": "",
+    "resetContexts": false,
+    "rootFollowupIntentName": "",
+    "parentFollowupIntentName": "",
+    "mlDisabled": false
+  },
+  "intentDetectionConfidence": 1,
+  "diagnosticInfo": {
+    "fields": {
+      "webhook_latency_ms": {
+        "numberValue": 1332,
+        "kind": "numberValue"
+      }
+    }
+  },
+  "languageCode": "en"
+}

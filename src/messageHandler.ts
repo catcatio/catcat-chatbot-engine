@@ -21,7 +21,10 @@ export const messageHandler = (config: IConfig) =>
     const sessionPath = sessionClient.sessionPath(projectId, userId)
     console.log(sessionPath)
     const queryParamsPayload = {
-      source: 'line',
+      source,
+      userId,
+      type,
+      message,
       data: originalMessage
     }
     const query = {
@@ -41,7 +44,7 @@ export const messageHandler = (config: IConfig) =>
     return sessionClient.detectIntent(query)
       .then(response => {
         const result = response[0].queryResult
-        console.log(JSON.stringify(response[0].queryResult))
+        console.log('detectIntent', JSON.stringify(response[0].queryResult))
         if (result.fulfillmentText) {
           console.log(`[${source}/${type}]\t${userId} <-- ${result.fulfillmentText}`)
           return result.fulfillmentText
@@ -55,12 +58,12 @@ export const messageHandler = (config: IConfig) =>
           if (replyMsg.payload !== undefined) { // from dialogflow custom response
             const payload: any = structjson.structProtoToJson(replyMsg.payload)
             const linePayload = payload.line
-            console.log(`[${source}/${type}]\t${userId} <-- ${JSON.stringify(linePayload)}`)
+            console.log(`xx [${source}/${type}]\t${userId} <-- ${JSON.stringify(linePayload)}`)
             return linePayload
           } else if (replyMsg.text !== undefined) {
             const msg = replyMsg.text
-            console.log(`[${source}/${type}]\t${userId} <-- ${msg}`)
-            return msg
+            console.log(`yy [${source}/${type}]\t${userId} <-- ${JSON.stringify(msg)}`)
+            return Array.isArray(msg.text) && msg.text.length > 0 ? msg.text[0]: JSON.stringify(msg)
           }
         }
       })
