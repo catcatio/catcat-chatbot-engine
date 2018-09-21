@@ -1,7 +1,7 @@
 
 export const intentName = 'books.list.all'
 
-export const handler = (lineClient, lineMessageFormatter, {}) => async (agent) => {
+export const handler = (lineClient, lineMessageFormatter, { }) => async (agent) => {
   console.log(intentName)
   const {
     requestSource,
@@ -41,14 +41,15 @@ export const handler = (lineClient, lineMessageFormatter, {}) => async (agent) =
       description: 'Roderick hates going to bed, and the young boy has become quite resourceful in coming up with ways to delay the dreaded hour when the lights must go out. Roderick\'s loving parents--fed up with the distractions and demands that have become his anti-bedtime ritual--decide to get him a stuffed animal to cuddle with and help him wind down. However, Sleepy quickly proves to be a bit high-maintenance. Just when we fear the night may never end, Sleepy\'s antics become too exhausting for Roderick to bear.',
       unitPrice: 0,
       unitPriceCurrency: 'THB',
+      readerLink: 'line://app/1599822021-XeRpEJg8'
     }
   ]
 
   try {
     const message = lineMessageFormatter.listAllBooks(books)
-    lineClient.pushMessage(userId, message)
-  } catch(err){
-    console.log(err)
+      .catch(err => console.error('XXX', JSON.stringify(err.response.data)))
+  } catch (err) {
+    console.log('books.list.all', err)
   }
 
 

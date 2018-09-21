@@ -7,11 +7,32 @@ import structjson from './utils/dialogflow/structjson';
 const PLATFORM_UNSPECIFIED = 'PLATFORM_UNSPECIFIED'
 const PLATFORM_LINE = 'LINE'
 
+const welcomeTemplate = (message, ...options) => {
+  return {
+    'type': 'text',
+    'text': message,
+    'quickReply': {
+      'items': options.map(op => ({
+        'type': 'action',
+        'action': {
+          'type': 'message',
+          'label': op,
+          'text': op
+        }
+      }))
+    }
+  }
+}
+
 export const messageHandler = (config: IConfig) =>
   async (prasedMessage: IParsedMessage, originalMessage: any) => {
     const projectId = config.googleProject
     const { message, userId, source, type } = prasedMessage
     console.log(`[${source}/${type}]\t${userId} --> ${message}`)
+
+    if (type === 'follow') {
+      return welcomeTemplate('ดีจ้า~ Reeeed 📚 ยินดีต้อนรับ\nลองป้อนคำว่า "Show book" เพื่อแสดงหนังสือดูน', 'Show Book', 'Nothing')
+    }
 
     if (type !== 'textMessage') {
       return null

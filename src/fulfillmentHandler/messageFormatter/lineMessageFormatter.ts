@@ -73,19 +73,23 @@ const listAllBooks = (imageResizeService) => (books) => {
             FlexComponentBuilder.flexButton()
               .setStyle('primary')
               .setColor('#718792')
-              .setAction({
+              .setAction(book.unitPrice > 0 ? {
                 type: 'message',
                 label: book.unitPrice > 0 ? 'PURCHASE' : 'START READING',
                 text: book.unitPrice > 0 ? `purchase ${book.title}` : `read book ${book.title}`
-              })
+              } : {
+                  type: 'uri',
+                  label: 'START READING',
+                  uri: book.readerLink
+                })
               .build(),
-            // FlexComponentBuilder.flexButton()
-            //   .setAction({
-            //     'type': 'uri',
-            //     'label': 'MORE',
-            //     'uri': book.link
-            //   })
-            //   .build()
+            FlexComponentBuilder.flexButton()
+              .setAction({
+                'type': 'uri',
+                'label': 'MORE',
+                'uri': book.link
+              })
+              .build()
           )
           .build()
       )
@@ -163,7 +167,7 @@ const singleBookView = (imageResizeService) => (book) => {
             .setAction({
               type: 'uri',
               label: 'START READING',
-              uri: 'line://app/1576196861-k8N8XwAj'
+              uri: book.readerLink
             })
             .build()
         )
@@ -274,7 +278,7 @@ const bookShelf = (imageResizeService) => (books) => {
               .setAction({
                 type: 'uri',
                 label: 'START READING',
-                uri: 'line://app/1576196861-k8N8XwAj'
+                uri: book.readerLink
               })
               .build()
             // FlexComponentBuilder.flexButton()
@@ -295,7 +299,7 @@ const bookShelf = (imageResizeService) => (books) => {
 
 const makePaymentTemplate = (title, message, paymentLink) => {
   const lineTemplate = new FlexMessageBuilder()
-  const template = lineTemplate.flexMessage('Invite friend')
+  const template = lineTemplate.flexMessage('Payment')
     .addBubble()
     .addHeader()
     .addComponents(
