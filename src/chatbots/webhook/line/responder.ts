@@ -7,6 +7,7 @@ const tryGetErrorMessage = (err) => {
 }
 
 export const lineReply = (replyToken, message, lineClient) => {
+  console.log('responder', typeof message)
   var messages = []
   if (typeof message === 'string') {
     messages = [{

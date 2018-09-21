@@ -7,7 +7,15 @@ const { project_id } = JSON.parse(readFileSync(serviceAccountFile, 'utf-8'))
 const line: ILineConfig = {
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN || '',
   channelSecret: process.env.LINE_CHANNEL_SECRET || '',
+  channelId: process.env.LINE_CHANNEL_ID || '',
 }
+
+const linePay = require('line-pay')
+const pay = new linePay({
+  channelId: process.env.LINE_PAY_CHANNEL_ID,
+  channelSecret: process.env.LINE_PAY_CHANNEL_SECRET,
+  isSandbox: process.env.LINE_PAY_PRODUCTION !== 'true',
+})
 
 const googleProject = project_id
 const port = parseInt(process.env.PORT || '') || 3000
@@ -21,7 +29,10 @@ export const config: IConfig = {
   apis,
   providers,
   googleProject,
-  imageResizeService
+  imageResizeService,
+  linepay: pay,
+  transactionStore: {},
+  linepayConfirmUrl: process.env.LINE_PAY_CONFIRM_URL
 }
 
 export interface IConfig {
@@ -30,9 +41,13 @@ export interface IConfig {
   line?: ILineConfig,
   apis: string[],
   providers: string[],
-  imageResizeService: string
+  imageResizeService: string,
+  linepay: any,
+  transactionStore: any,
+  linepayConfirmUrl: any
 }
 export interface ILineConfig {
   channelAccessToken: string,
-  channelSecret: string
+  channelSecret: string,
+  channelId: string
 }

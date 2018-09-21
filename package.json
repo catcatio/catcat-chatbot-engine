@@ -23,7 +23,8 @@
     "dialogflow": "^0.6.0",
     "dialogflow-fulfillment": "^0.5.0",
     "dotenv": "^6.0.0",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "line-pay": "^1.0.11"
   },
   "devDependencies": {
     "@types/dialogflow": "^0.6.3",

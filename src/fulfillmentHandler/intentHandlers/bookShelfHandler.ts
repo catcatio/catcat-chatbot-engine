@@ -15,6 +15,7 @@ export const handler = (lineClient, lineMessageFormatter, { }) =>
       queryText,
     } = agent
 
+    // TODO: Load bought book from store
     const books = [
       {
         id: 1,
@@ -23,7 +24,7 @@ export const handler = (lineClient, lineMessageFormatter, { }) =>
         link: 'https://www.amazon.com/gp/product/1492662208/',
         description: 'When a little boy stumbles across a lost star, he decides to take care of it, putting it in a jar and carrying it with him everywhere. But when the sky calls out for its missing star, can the little boy and his sister figure out a way to return the star to its friends in the sky...even if it means saying goodbye forever?',
         unitPrice: 12.5,
-        unitPriceCurrency: 'USD',
+        unitPriceCurrency: 'THB',
       },
       {
         id: 3,
@@ -32,7 +33,7 @@ export const handler = (lineClient, lineMessageFormatter, { }) =>
         link: 'https://www.amazon.com/gp/product/1484789695',
         description: 'Roderick hates going to bed, and the young boy has become quite resourceful in coming up with ways to delay the dreaded hour when the lights must go out. Roderick\'s loving parents--fed up with the distractions and demands that have become his anti-bedtime ritual--decide to get him a stuffed animal to cuddle with and help him wind down. However, Sleepy quickly proves to be a bit high-maintenance. Just when we fear the night may never end, Sleepy\'s antics become too exhausting for Roderick to bear.',
         unitPrice: 0,
-        unitPriceCurrency: 'USD',
+        unitPriceCurrency: 'THB',
       }
     ]
 

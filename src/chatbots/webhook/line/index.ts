@@ -21,8 +21,8 @@ const initApi = (config, messageHandlerAsync) => {
         parsedMessage.source = 'line'
 
         return messageHandlerAsync(parsedMessage, originalMessage)
-          .then(response => responder(replyToken, response, lineClient))
-          .catch(console.error);
+          .then(response => response && responder(replyToken, response, lineClient))
+          .catch(console.error)
       }
     };
 
