@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 
-const serviceAccountFile = join(process.cwd(), process.env.GOOGLE_APPLICATION_CREDENTIALS)
+const serviceAccountFile = join(process.cwd(), process.env.GOOGLE_APPLICATION_CREDENTIALS || 'serviceAccountKey.json')
 const { project_id } = JSON.parse(readFileSync(serviceAccountFile, 'utf-8'))
 
 const line: ILineConfig = {
@@ -21,7 +21,7 @@ const googleProject = project_id
 const port = parseInt(process.env.PORT || '') || 3000
 const apis = ['webhook', 'fulfillment']
 const providers = ['line']
-const imageResizeService = process.env.IMG_RESIZE_SERVICE
+const imageResizeService = process.env.IMG_RESIZE_SERVICE || ''
 
 export const config: IConfig = {
   port,

@@ -78,16 +78,8 @@ export const linepayconfirm = (config: IConfig) => {
         return response.status(400).send('transaction not found')
       }
 
-      const book = {
-        id: 2,
-        title: 'How to Be a Good Creature: A Memoir in Thirteen Animals',
-        coverImage: 'https://images-na.ssl-images-amazon.com/images/I/51Wm75LdUIL.jpg',
-        link: 'https://www.amazon.com/gp/product/0544938321',
-        description: 'Understanding someone who belongs to another species can be transformative. No one knows this better than author, naturalist, and adventurer Sy Montgomery. To research her books, Sy has traveled the world and encountered some of the planet’s rarest and most beautiful animals. From tarantulas to tigers, Sy’s life continually intersects with and is informed by the creatures she meets.',
-        unitPrice: 9.99,
-        unitPriceCurrency: 'THB',
-      }
-
+      const book = transaction.book
+      book.readerLink = 'line://app/1599822021-XeRpEJg8'
       const confirmation = {
         transactionId: transactionId,
         amount: transaction.reservation.amount,
@@ -115,7 +107,7 @@ export const linepayconfirm = (config: IConfig) => {
       }
 
       await lineClient.pushMessage(transaction.userId, lineMessageFormatter.messageTemplate(`Thanks for purchasing \"${transaction.bookTitle}\".\n\n📚 Enjoy reading 🍿`))
-
+      console.log('transaction.userId', transaction.userId)
       const message = lineMessageFormatter.singleBookView(book, true)
       return lineClient.pushMessage(transaction.userId, message)
 

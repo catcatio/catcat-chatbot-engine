@@ -47,7 +47,7 @@ export const handler = (lineClient, lineMessageFormatter, { }) => async (agent) 
 
   try {
     const message = lineMessageFormatter.listAllBooks(books)
-      .catch(err => console.error('XXX', JSON.stringify(err.response.data)))
+    lineClient.pushMessage(userId, message)
   } catch (err) {
     console.log('books.list.all', err)
   }

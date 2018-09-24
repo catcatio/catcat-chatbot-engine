@@ -54,6 +54,7 @@ export const handler = (lineClient, lineMessageFormatter, { linepay, linepayConf
       bookId: book.id,
       bookTitle: book.title,
       requestSource: requestSource,
+      book,
       type: 'book'
     }
 

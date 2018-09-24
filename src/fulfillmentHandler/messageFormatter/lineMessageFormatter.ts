@@ -75,11 +75,11 @@ const listAllBooks = (imageResizeService) => (books) => {
               .setColor('#718792')
               .setAction(book.unitPrice > 0 ? {
                 type: 'message',
-                label: book.unitPrice > 0 ? 'PURCHASE' : 'START READING',
+                label: book.unitPrice > 0 ? 'PURCHASE' : 'REEEED',
                 text: book.unitPrice > 0 ? `purchase ${book.title}` : `read book ${book.title}`
               } : {
                   type: 'uri',
-                  label: 'START READING',
+                  label: 'REEEED',
                   uri: book.readerLink
                 })
               .build(),
@@ -166,13 +166,15 @@ const singleBookView = (imageResizeService) => (book) => {
             .setColor('#718792')
             .setAction({
               type: 'uri',
-              label: 'START READING',
+              label: 'REEEED',
               uri: book.readerLink
             })
             .build()
         )
         .build()
     )
+
+    console.log(JSON.stringify(template.build().contents))
 
   return template.build()
 }
@@ -277,7 +279,7 @@ const bookShelf = (imageResizeService) => (books) => {
               .setColor('#718792')
               .setAction({
                 type: 'uri',
-                label: 'START READING',
+                label: 'REEEED',
                 uri: book.readerLink
               })
               .build()

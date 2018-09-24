@@ -31,7 +31,7 @@ export const messageHandler = (config: IConfig) =>
     console.log(`[${source}/${type}]\t${userId} --> ${message}`)
 
     if (type === 'follow') {
-      return welcomeTemplate('ดีจ้า~ Reeeed 📚 ยินดีต้อนรับ\nลองป้อนคำว่า "Show book" เพื่อแสดงหนังสือดูน', 'Show Book', 'Nothing')
+      return welcomeTemplate('ดีจ้า~ Reeeed 📚 ยินดีต้อนรับ\nลองป้อนคำว่า "Show book" เพื่อแสดงหนังสือดูนะ', 'Show Book', 'Nothing')
     }
 
     if (type !== 'textMessage') {
