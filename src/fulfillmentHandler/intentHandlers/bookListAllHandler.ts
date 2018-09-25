@@ -46,7 +46,7 @@ export const handler = (lineClient, lineMessageFormatter, { }) => async (agent) 
   ]
 
   try {
-    const message = lineMessageFormatter.listAllBooks(books)
+    const message = lineMessageFormatter.listAllBooks(books, languageCode)
     lineClient.pushMessage(userId, message)
   } catch (err) {
     console.log('books.list.all', err)

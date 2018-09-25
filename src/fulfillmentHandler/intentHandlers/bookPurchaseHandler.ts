@@ -16,7 +16,10 @@ export const handler = (lineClient, lineMessageFormatter, { linepay, linepayConf
       queryText,
     } = agent
     const bookTitle = parameters['book-title']
-    await lineClient.pushMessage(userId, lineMessageFormatter.messageTemplate('Please wait while we are processing your order'))
+    await lineClient.pushMessage(userId, lineMessageFormatter.messageTemplate(
+      languageCode === 'th'
+      ? 'รอเดี่ยวนะ กำลังดำเนินการสั่งหนังสือให้'
+      : 'Please wait while we are processing your order'))
 
     const book = {
       id: 2,
@@ -59,8 +62,8 @@ export const handler = (lineClient, lineMessageFormatter, { linepay, linepayConf
     }
 
     const message = lineMessageFormatter.makePaymentTemplate(
-      'Please proceed to the payment',
-      `${formatCurrency(book.unitPrice, true)} THB for "${book.title}" book. Please proceed to the payment.`,
-     response.info.paymentUrl.web)
+      languageCode === 'th' ? 'การชำระเงิน' : 'Please proceed to the payment',
+      languageCode === 'th' ? `${formatCurrency(book.unitPrice, true)} ${book.unitPriceCurrency} สำหรับหนังสือ "${book.title}" โปรดดำเนินการชำระเงิน` : `${formatCurrency(book.unitPrice, true)} THB for "${book.title}" book. Please proceed to the payment.`,
+     response.info.paymentUrl.web, languageCode)
     return lineClient.pushMessage(userId, message)
   }

@@ -5,7 +5,7 @@ const limitChar = (str, limit) => {
   return `${str.substr(0, limit)}${str.length > limit ? '...' : ''}`
 }
 
-const listAllBooks = (imageResizeService) => (books) => {
+const listAllBooks = (imageResizeService) => (books, languageCode) => {
   const lineTemplate = new FlexMessageBuilder()
   const template = lineTemplate.flexMessage(`book shelf`)
     .addCarousel()
@@ -73,11 +73,13 @@ const listAllBooks = (imageResizeService) => (books) => {
             FlexComponentBuilder.flexButton()
               .setStyle('primary')
               .setColor('#718792')
-              .setAction(book.unitPrice > 0 ? {
-                type: 'message',
-                label: book.unitPrice > 0 ? 'PURCHASE' : 'REEEED',
-                text: book.unitPrice > 0 ? `purchase ${book.title}` : `read book ${book.title}`
-              } : {
+              .setAction(book.unitPrice > 0
+                ? {
+                  type: 'message',
+                  label: languageCode === 'th' ? 'สั่งซื้อ' : 'PURCHASE',
+                  text: languageCode === 'th' ? `ซื้อหนังสือ ${book.title}` : `purchase ${book.title}`
+                }
+                : {
                   type: 'uri',
                   label: 'REEEED',
                   uri: book.readerLink
@@ -86,7 +88,7 @@ const listAllBooks = (imageResizeService) => (books) => {
             FlexComponentBuilder.flexButton()
               .setAction({
                 'type': 'uri',
-                'label': 'MORE',
+                'label': languageCode === 'th' ? 'เพิ่มเติม' : 'MORE',
                 'uri': book.link
               })
               .build()
@@ -174,7 +176,7 @@ const singleBookView = (imageResizeService) => (book) => {
         .build()
     )
 
-    console.log(JSON.stringify(template.build().contents))
+  console.log(JSON.stringify(template.build().contents))
 
   return template.build()
 }
@@ -299,7 +301,7 @@ const bookShelf = (imageResizeService) => (books) => {
   return template.build()
 }
 
-const makePaymentTemplate = (title, message, paymentLink) => {
+const makePaymentTemplate = (title, message, paymentLink, languageCode) => {
   const lineTemplate = new FlexMessageBuilder()
   const template = lineTemplate.flexMessage('Payment')
     .addBubble()
@@ -338,7 +340,7 @@ const makePaymentTemplate = (title, message, paymentLink) => {
         .setColor('#b0bec5')
         .setAction({
           'type': 'uri',
-          'label': 'Pay by LINE Pay',
+          'label': languageCode === 'th' ? 'จ่ายด้วย LINE Pay' : 'Pay by LINE Pay',
           'uri': paymentLink
         })
         .build(),
