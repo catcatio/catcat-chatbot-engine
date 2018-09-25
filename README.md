@@ -1,1 +1,1 @@
-# bots-template
+# bookshelf-chatbot
