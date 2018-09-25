@@ -15,6 +15,7 @@ export const handler = (lineClient, lineMessageFormatter, { linepay, linepayConf
       languageCode,
       queryText,
     } = agent
+
     const bookTitle = parameters['book-title']
     await lineClient.pushMessage(userId, lineMessageFormatter.messageTemplate(
       languageCode === 'th'

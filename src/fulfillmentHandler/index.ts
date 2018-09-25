@@ -106,11 +106,25 @@ export const linepayconfirm = (config: IConfig) => {
         return 'EVENT_BOOK_ERROR'
       }
 
-      await lineClient.pushMessage(transaction.userId, lineMessageFormatter.messageTemplate(`Thanks for purchasing \"${transaction.bookTitle}\".\n\n📚 Enjoy reading 🍿`))
-      console.log('transaction.userId', transaction.userId)
-      const message = lineMessageFormatter.singleBookView(book, true)
-      return lineClient.pushMessage(transaction.userId, message)
-
+      await lineClient.pushMessage(transaction.userId, lineMessageFormatter.messageTemplate(
+        transaction.languageCode === 'th'
+          ? lineMessageFormatter.quickReply('ขอบคุณที่สนับสนุนผู้เขียน ขอให้สนุกกับการอ่านนะ, อยากอ่านเลยรึเปล่า?', 'ยังก่อน', {
+            type: 'action',
+            action: {
+              type: 'message',
+              label: 'อ่านเลย',
+              text: `อ่านหนังสือ ${transaction.bookTitle}`
+            }
+          })
+          : lineMessageFormatter.quickReply('Thanks for purchase! Enjoy! Do you want to read it now', 'Not yet', {
+            type: 'action',
+            action: {
+              type: 'message',
+              label: 'Sure',
+              text: `read book ${transaction.bookTitle}`
+            }
+          })
+      ))
     } catch (error) {
       console.error(error)
     }

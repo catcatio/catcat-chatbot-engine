@@ -51,7 +51,4 @@ export const handler = (lineClient, lineMessageFormatter, { }) => async (agent) 
   } catch (err) {
     console.log('books.list.all', err)
   }
-
-
-  // agent.add(intentName)
 }

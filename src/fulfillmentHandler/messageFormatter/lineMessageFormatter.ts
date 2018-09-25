@@ -141,22 +141,22 @@ const singleBookView = (imageResizeService) => (book) => {
         )
         .build()
     )
-    // price
-    .addComponents(
-      FlexComponentBuilder.flexBox()
-        .setMargin('md')
-        .setLayout('horizontal')
-        .addContents(
-          FlexComponentBuilder.flexText()
-            .setText(`💵  ${book.unitPrice > 0 ? `${book.unitPrice} ${book.unitPriceCurrency}` : 'FREE'}`)
-            .setWrap(true)
-            .setColor('#222222')
-            .setWeight('bold')
-            .setSize('xs')
-            .build()
-        )
-        .build()
-    )
+    // // price
+    // .addComponents(
+    //   FlexComponentBuilder.flexBox()
+    //     .setMargin('md')
+    //     .setLayout('horizontal')
+    //     .addContents(
+    //       FlexComponentBuilder.flexText()
+    //         .setText(`💵  ${book.unitPrice > 0 ? `${book.unitPrice} ${book.unitPriceCurrency}` : 'FREE'}`)
+    //         .setWrap(true)
+    //         .setColor('#222222')
+    //         .setWeight('bold')
+    //         .setSize('xs')
+    //         .build()
+    //     )
+    //     .build()
+    // )
     .addFooter()
     .setLayout("vertical")
     .addComponents(
@@ -349,10 +349,31 @@ const makePaymentTemplate = (title, message, paymentLink, languageCode) => {
   return template.build()
 }
 
+const quickReply = (message, ...options) => {
+  const msg = {
+    'type': 'text',
+    'text': message,
+    'quickReply': {
+      'items': options.map(op => (typeof op !== 'string' ? op : {
+        'type': 'action',
+        'action': {
+          'type': 'message',
+          'label': op,
+          'text': op
+        }
+      }))
+    }
+  }
+
+  console.log(msg)
+  return msg
+}
+
 export default ({ imageResizeService }) => ({
   listAllBooks: listAllBooks(imageResizeService),
   singleBookView: singleBookView(imageResizeService),
   bookShelf: bookShelf(imageResizeService),
   messageTemplate,
-  makePaymentTemplate
+  makePaymentTemplate,
+  quickReply
 })
