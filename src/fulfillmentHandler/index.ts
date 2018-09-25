@@ -1,5 +1,4 @@
 import * as intentHandlers from './intentHandlers'
-import { request } from 'http';
 import { IConfig } from '../config';
 const { Client } = require('@line/bot-sdk')
 
@@ -31,11 +30,12 @@ const getUserId = request => {
 
 export const bookshelf = (config) => {
   const lineClient = new Client(config.line)
+  const bookRepository = require('./booksRepository')
   const lineMessageFormatter = require('./messageFormatter/lineMessageFormatter').default(config)
   const intentMap = new Map()
 
   Object.keys(intentHandlers).forEach(key => {
-    intentMap.set(intentHandlers[key].intentName, intentHandlers[key].handler(lineClient, lineMessageFormatter, config))
+    intentMap.set(intentHandlers[key].intentName, intentHandlers[key].handler(bookRepository, lineClient, lineMessageFormatter, config))
   })
 
   return (request, response) => {
@@ -78,8 +78,6 @@ export const linepayconfirm = (config: IConfig) => {
         return response.status(400).send('transaction not found')
       }
 
-      const book = transaction.book
-      book.readerLink = 'line://app/1599822021-XeRpEJg8'
       const confirmation = {
         transactionId: transactionId,
         amount: transaction.reservation.amount,

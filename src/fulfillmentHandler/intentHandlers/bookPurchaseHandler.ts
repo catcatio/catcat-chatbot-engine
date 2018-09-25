@@ -2,7 +2,7 @@ import { formatCurrency } from '../../utils/formatCurrency';
 
 export const intentName = 'books.purchase - yes'
 
-export const handler = (lineClient, lineMessageFormatter, { linepay, linepayConfirmUrl, transactionStore }) =>
+export const handler = (bookRepository, lineClient, lineMessageFormatter, { linepay, linepayConfirmUrl, transactionStore }) =>
   async (agent) => {
     console.log(intentName)
     const {
@@ -22,15 +22,7 @@ export const handler = (lineClient, lineMessageFormatter, { linepay, linepayConf
       ? 'รอเดี่ยวนะ กำลังดำเนินการสั่งหนังสือให้'
       : 'Please wait while we are processing your order'))
 
-    const book = {
-      id: 2,
-      title: bookTitle,
-      coverImage: 'https://images-na.ssl-images-amazon.com/images/I/51Wm75LdUIL.jpg',
-      link: 'https://www.amazon.com/gp/product/0544938321',
-      description: 'Understanding someone who belongs to another species can be transformative. No one knows this better than author, naturalist, and adventurer Sy Montgomery. To research her books, Sy has traveled the world and encountered some of the planet’s rarest and most beautiful animals. From tarantulas to tigers, Sy’s life continually intersects with and is informed by the creatures she meets.',
-      unitPrice: 100,
-      unitPriceCurrency: 'THB',
-    }
+    const book = bookRepository.getBookByTitle(bookTitle)
 
     const reservation: any = {
       productName: book.title,
