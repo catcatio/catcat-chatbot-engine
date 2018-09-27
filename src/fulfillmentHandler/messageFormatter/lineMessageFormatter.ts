@@ -98,6 +98,80 @@ const listAllBooks = (imageResizeService) => (books, languageCode) => {
       .build()
   })
 
+  template.addBubble()
+    .addHero(FlexComponentBuilder.flexImage()
+      .setUrl(`${imageResizeService}${encodeURIComponent(`https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Grey_matter_and_white_matter_-_very_high_mag.jpg/1200px-Grey_matter_and_white_matter_-_very_high_mag.jpg`)}&size=1000&seed=${Date.now()}`)
+      // .setUrl('https://media.giphy.com/media/AQktflfHoptNm/source.gif')
+      .setSize('full')
+      .setAspectRatio('16:9')
+      .setAspectMode('cover')
+      .build() as FlexImage)
+      .addBody()
+      .setLayout('vertical')
+      // title
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText('  ')
+              // .setWrap(true)
+              .setWeight('bold')
+              .build()
+          )
+          .build()
+      )
+      // teaser
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setMargin('md')
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText('  ')
+              .setSize('sm')
+              .setWrap(true)
+              .setMaxLines(3)
+              .build()
+          )
+          .build()
+      )
+      // price
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setMargin('md')
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText('  ')
+              .setWrap(true)
+              .setColor('#222222')
+              .setWeight('bold')
+              .setSize('xs')
+              .build()
+          )
+          .build()
+      )
+    .addFooter()
+    .setLayout("vertical")
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setLayout('vertical')
+        .addContents(
+          FlexComponentBuilder.flexButton()
+            .setStyle('primary')
+            .setColor('#718792')
+            .setAction({
+                type: 'uri',
+                label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
+                uri: 'line://app/1599822021-BQbYxmDo'
+              })
+            .build(),
+        )
+        .build()
+    )
+    .build()
+
   return template.build()
 }
 
@@ -211,7 +285,7 @@ const messageTemplate = (message) => {
   return messages
 }
 
-const bookShelf = (imageResizeService) => (books) => {
+const bookShelf = (imageResizeService) => (books, languageCode) => {
   const lineTemplate = new FlexMessageBuilder()
   const template = lineTemplate.flexMessage(`book shelf`)
     .addCarousel()
@@ -297,6 +371,79 @@ const bookShelf = (imageResizeService) => (books) => {
       )
       .build()
   })
+
+  template.addBubble()
+    .addHero(FlexComponentBuilder.flexImage()
+      .setUrl(`${imageResizeService}${encodeURIComponent(`https://clip2art.com/images/library-clipart-personal-7.png`)}&size=1000&seed=${Date.now()}`)
+      .setSize('full')
+      .setAspectRatio('16:9')
+      .setAspectMode('cover')
+      .build() as FlexImage)
+      .addBody()
+      .setLayout('vertical')
+      // title
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText('  ')
+              // .setWrap(true)
+              .setWeight('bold')
+              .build()
+          )
+          .build()
+      )
+      // teaser
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setMargin('md')
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText('  ')
+              .setSize('sm')
+              .setWrap(true)
+              .setMaxLines(3)
+              .build()
+          )
+          .build()
+      )
+      // price
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setMargin('md')
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText('  ')
+              .setWrap(true)
+              .setColor('#222222')
+              .setWeight('bold')
+              .setSize('xs')
+              .build()
+          )
+          .build()
+      )
+    .addFooter()
+    .setLayout("vertical")
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setLayout('vertical')
+        .addContents(
+          FlexComponentBuilder.flexButton()
+            .setStyle('primary')
+            .setColor('#718792')
+            .setAction({
+                type: 'uri',
+                label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
+                uri: 'line://app/1599822021-BQbYxmDo'
+              })
+            .build(),
+        )
+        .build()
+    )
+    .build()
 
   return template.build()
 }

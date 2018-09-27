@@ -3,7 +3,7 @@ import { config } from './config'
 
 import * as chatbots from './chatbots'
 import * as fulfillmentHandler from './fulfillmentHandler'
-import messageHandler from './messageHandler'
+import { messageHandler } from './messageHandler'
 
 chatbots.create(config, { messageHandler: messageHandler(config), fulfillmentHandler })
   .then(bots => {

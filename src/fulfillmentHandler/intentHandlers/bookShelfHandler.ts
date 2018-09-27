@@ -19,7 +19,7 @@ export const handler = (bookRepository, lineClient, lineMessageFormatter, { }) =
     const books = bookRepository.getPurchasedBook()
 
     try {
-      const message = lineMessageFormatter.bookShelf(books)
+      const message = lineMessageFormatter.bookShelf(books, languageCode)
       lineClient.pushMessage(userId, message)
     } catch(err){
       console.log(err)
