@@ -49,7 +49,7 @@ export const handler = (bookRepository, lineClient, lineMessageFormatter, { line
       userId: userId,
       bookId: book.id,
       bookTitle: book.title,
-      requestSource: requestSource,
+      requestSource: (requestSource || '').toLowerCase(),
       book,
       type: 'book'
     }
