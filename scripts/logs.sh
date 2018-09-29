@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ssh root@catcat.io "cd ~/bots_performance && docker-compose logs -f"
+ssh root@catcat.io "cd ~/gdh-bots && docker-compose logs -f"

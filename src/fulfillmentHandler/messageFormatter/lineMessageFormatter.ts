@@ -5,19 +5,19 @@ const limitChar = (str, limit) => {
   return `${str.substr(0, limit)}${str.length > limit ? '...' : ''}`
 }
 
-const listAllBooks = (imageResizeService) => (books, languageCode) => {
+const listAllMovies = (imageResizeService) => (movies, languageCode) => {
   const lineTemplate = new FlexMessageBuilder()
-  const template = lineTemplate.flexMessage(`book shelf`)
+  const template = lineTemplate.flexMessage(`movie shelf`)
     .addCarousel()
 
-  books.forEach(book => {
+  movies.forEach(movie => {
     template.addBubble()
       .addHero(FlexComponentBuilder.flexImage()
-        .setUrl(`${imageResizeService}${encodeURIComponent(book.coverImage)}&size=1000&seed=${Date.now()}`)
+        .setUrl(`${imageResizeService}${encodeURIComponent(movie.coverImage)}&size=1000&seed=${Date.now()}`)
         .setSize('full')
         .setAspectRatio('16:9')
         .setAspectMode('cover')
-        .build() as FlexImage)
+      .build() as FlexImage)
       .addBody()
       .setLayout('vertical')
       // title
@@ -26,7 +26,7 @@ const listAllBooks = (imageResizeService) => (books, languageCode) => {
           .setLayout('horizontal')
           .addContents(
             FlexComponentBuilder.flexText()
-              .setText(book.title)
+              .setText(movie.title)
               // .setWrap(true)
               .setWeight('bold')
               .build()
@@ -40,10 +40,23 @@ const listAllBooks = (imageResizeService) => (books, languageCode) => {
           .setLayout('horizontal')
           .addContents(
             FlexComponentBuilder.flexText()
-              .setText(limitChar(book.description, 64))
+              .setText(limitChar(movie.description, 64))
               .setSize('sm')
               .setWrap(true)
               .setMaxLines(3)
+              .build()
+          )
+          .build()
+      )
+      // score
+      .addComponents(
+        FlexComponentBuilder.flexBox()
+          .setMargin('md')
+          .setLayout('horizontal')
+          .addContents(
+            FlexComponentBuilder.flexText()
+              .setText(movie.score)
+              .setSize('sm')
               .build()
           )
           .build()
@@ -55,7 +68,7 @@ const listAllBooks = (imageResizeService) => (books, languageCode) => {
           .setLayout('horizontal')
           .addContents(
             FlexComponentBuilder.flexText()
-              .setText(`💵  ${book.unitPrice > 0 ? `${book.unitPrice} ${book.unitPriceCurrency}` : 'FREE'}`)
+              .setText(`💵  ${movie.unitPrice > 0 ? `${movie.unitPrice} ${movie.unitPriceCurrency}` : 'FREE'}`)
               .setWrap(true)
               .setColor('#222222')
               .setWeight('bold')
@@ -73,23 +86,30 @@ const listAllBooks = (imageResizeService) => (books, languageCode) => {
             FlexComponentBuilder.flexButton()
               .setStyle('primary')
               .setColor('#718792')
-              .setAction(book.unitPrice > 0
+              .setAction(movie.hasPurchased
                 ? {
-                  type: 'message',
-                  label: languageCode === 'th' ? 'สั่งซื้อ' : 'PURCHASE',
-                  text: languageCode === 'th' ? `ซื้อหนังสือ ${book.title}` : `purchase ${book.title}`
+                  type: 'uri',
+                  label: languageCode === 'th' ? 'ดูเลย' : 'Watch Now',
+                  uri: movie.viewerLink
                 }
                 : {
-                  type: 'uri',
-                  label: 'REEEED',
-                  uri: book.readerLink
+                  type: 'message',
+                  label: languageCode === 'th' ? 'ดูหนัง' : 'Watch',
+                  text: languageCode === 'th' ? `ดูหนัง ${movie.title}` : `watch ${movie.title}`
                 })
               .build(),
             FlexComponentBuilder.flexButton()
               .setAction({
                 'type': 'uri',
+                'label': languageCode === 'th' ? 'ตัวอย่าง' : 'Trailer',
+                'uri': movie.trailerLink
+              })
+              .build(),
+            FlexComponentBuilder.flexButton()
+              .setAction({
+                'type': 'uri',
                 'label': languageCode === 'th' ? 'เพิ่มเติม' : 'MORE',
-                'uri': book.link
+                'uri': movie.link
               })
               .build()
           )
@@ -106,85 +126,6 @@ const listAllBooks = (imageResizeService) => (books, languageCode) => {
       .setAspectRatio('16:9')
       .setAspectMode('cover')
       .build() as FlexImage)
-      .addBody()
-      .setLayout('vertical')
-      // title
-      .addComponents(
-        FlexComponentBuilder.flexBox()
-          .setLayout('horizontal')
-          .addContents(
-            FlexComponentBuilder.flexText()
-              .setText('  ')
-              // .setWrap(true)
-              .setWeight('bold')
-              .build()
-          )
-          .build()
-      )
-      // teaser
-      .addComponents(
-        FlexComponentBuilder.flexBox()
-          .setMargin('md')
-          .setLayout('horizontal')
-          .addContents(
-            FlexComponentBuilder.flexText()
-              .setText('  ')
-              .setSize('sm')
-              .setWrap(true)
-              .setMaxLines(3)
-              .build()
-          )
-          .build()
-      )
-      // price
-      .addComponents(
-        FlexComponentBuilder.flexBox()
-          .setMargin('md')
-          .setLayout('horizontal')
-          .addContents(
-            FlexComponentBuilder.flexText()
-              .setText('  ')
-              .setWrap(true)
-              .setColor('#222222')
-              .setWeight('bold')
-              .setSize('xs')
-              .build()
-          )
-          .build()
-      )
-    .addFooter()
-    .setLayout("vertical")
-    .addComponents(
-      FlexComponentBuilder.flexBox()
-        .setLayout('vertical')
-        .addContents(
-          FlexComponentBuilder.flexButton()
-            .setStyle('primary')
-            .setColor('#718792')
-            .setAction({
-                type: 'uri',
-                label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
-                uri: 'line://app/1599822021-BQbYxmDo'
-              })
-            .build(),
-        )
-        .build()
-    )
-    .build()
-
-  return template.build()
-}
-
-const singleBookView = (imageResizeService) => (book) => {
-  const lineTemplate = new FlexMessageBuilder()
-  const template = lineTemplate.flexMessage(`book shelf`)
-    .addBubble()
-    .addHero(FlexComponentBuilder.flexImage()
-      .setUrl(`${imageResizeService}${encodeURIComponent(book.coverImage)}&size=1000&seed=${Date.now()}`)
-      .setSize('full')
-      .setAspectRatio('16:9')
-      .setAspectMode('cover')
-      .build() as FlexImage)
     .addBody()
     .setLayout('vertical')
     // title
@@ -193,7 +134,7 @@ const singleBookView = (imageResizeService) => (book) => {
         .setLayout('horizontal')
         .addContents(
           FlexComponentBuilder.flexText()
-            .setText(book.title)
+            .setText('  ')
             // .setWrap(true)
             .setWeight('bold')
             .build()
@@ -207,7 +148,86 @@ const singleBookView = (imageResizeService) => (book) => {
         .setLayout('horizontal')
         .addContents(
           FlexComponentBuilder.flexText()
-            .setText(limitChar(book.description, 64))
+            .setText('  ')
+            .setSize('sm')
+            .setWrap(true)
+            .setMaxLines(3)
+            .build()
+        )
+        .build()
+    )
+    // price
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setMargin('md')
+        .setLayout('horizontal')
+        .addContents(
+          FlexComponentBuilder.flexText()
+            .setText('  ')
+            .setWrap(true)
+            .setColor('#222222')
+            .setWeight('bold')
+            .setSize('xs')
+            .build()
+        )
+        .build()
+    )
+    .addFooter()
+    .setLayout("vertical")
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setLayout('vertical')
+        .addContents(
+          FlexComponentBuilder.flexButton()
+            .setStyle('primary')
+            .setColor('#718792')
+            .setAction({
+              type: 'uri',
+              label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
+              uri: 'line://app/1599822021-BQbYxmDo'
+            })
+            .build(),
+        )
+        .build()
+    )
+    .build()
+
+  return template.build()
+}
+
+const singleMovieView = (imageResizeService) => (movie) => {
+  const lineTemplate = new FlexMessageBuilder()
+  const template = lineTemplate.flexMessage(`single movie`)
+    .addBubble()
+    .addHero(FlexComponentBuilder.flexImage()
+      .setUrl(`${imageResizeService}${encodeURIComponent(movie.coverImage)}&size=1000&seed=${Date.now()}`)
+      .setSize('full')
+      .setAspectRatio('16:9')
+      .setAspectMode('cover')
+      .build() as FlexImage)
+    .addBody()
+    .setLayout('vertical')
+    // title
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setLayout('horizontal')
+        .addContents(
+          FlexComponentBuilder.flexText()
+            .setText(movie.title)
+            // .setWrap(true)
+            .setWeight('bold')
+            .build()
+        )
+        .build()
+    )
+    // teaser
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setMargin('md')
+        .setLayout('horizontal')
+        .addContents(
+          FlexComponentBuilder.flexText()
+            .setText(limitChar(movie.description, 64))
             .setSize('sm')
             .setWrap(true)
             .setMaxLines(3)
@@ -222,7 +242,7 @@ const singleBookView = (imageResizeService) => (book) => {
     //     .setLayout('horizontal')
     //     .addContents(
     //       FlexComponentBuilder.flexText()
-    //         .setText(`💵  ${book.unitPrice > 0 ? `${book.unitPrice} ${book.unitPriceCurrency}` : 'FREE'}`)
+    //         .setText(`💵  ${movie.unitPrice > 0 ? `${movie.unitPrice} ${movie.unitPriceCurrency}` : 'FREE'}`)
     //         .setWrap(true)
     //         .setColor('#222222')
     //         .setWeight('bold')
@@ -242,8 +262,8 @@ const singleBookView = (imageResizeService) => (book) => {
             .setColor('#718792')
             .setAction({
               type: 'uri',
-              label: 'REEEED',
-              uri: book.readerLink
+              label: 'Watch Now',
+              uri: movie.viewerLink
             })
             .build()
         )
@@ -285,15 +305,15 @@ const messageTemplate = (message) => {
   return messages
 }
 
-const bookShelf = (imageResizeService) => (books, languageCode) => {
+const movieShelf = (imageResizeService) => (movies, languageCode) => {
   const lineTemplate = new FlexMessageBuilder()
-  const template = lineTemplate.flexMessage(`book shelf`)
+  const template = lineTemplate.flexMessage(`movie shelf`)
     .addCarousel()
 
-  books.forEach(book => {
+  movies.forEach(movie => {
     template.addBubble()
       .addHero(FlexComponentBuilder.flexImage()
-        .setUrl(`${imageResizeService}${encodeURIComponent(book.coverImage)}&size=1000&seed=${Date.now()}`)
+        .setUrl(`${imageResizeService}${encodeURIComponent(movie.coverImage)}&size=1000&seed=${Date.now()}`)
         .setSize('full')
         .setAspectRatio('16:9')
         .setAspectMode('cover')
@@ -306,7 +326,7 @@ const bookShelf = (imageResizeService) => (books, languageCode) => {
           .setLayout('horizontal')
           .addContents(
             FlexComponentBuilder.flexText()
-              .setText(book.title)
+              .setText(movie.title)
               // .setWrap(true)
               .setWeight('bold')
               .build()
@@ -320,7 +340,7 @@ const bookShelf = (imageResizeService) => (books, languageCode) => {
           .setLayout('horizontal')
           .addContents(
             FlexComponentBuilder.flexText()
-              .setText(limitChar(book.description, 64))
+              .setText(limitChar(movie.description, 64))
               .setSize('sm')
               .setWrap(true)
               .setMaxLines(3)
@@ -328,18 +348,15 @@ const bookShelf = (imageResizeService) => (books, languageCode) => {
           )
           .build()
       )
-      // price
+      // score
       .addComponents(
         FlexComponentBuilder.flexBox()
           .setMargin('md')
           .setLayout('horizontal')
           .addContents(
             FlexComponentBuilder.flexText()
-              .setText(`💵  ${book.unitPrice > 0 ? `${book.unitPrice} ${book.unitPriceCurrency}` : 'FREE'}`)
-              .setWrap(true)
-              .setColor('#222222')
-              .setWeight('bold')
-              .setSize('xs')
+              .setText(movie.score)
+              .setSize('sm')
               .build()
           )
           .build()
@@ -355,17 +372,10 @@ const bookShelf = (imageResizeService) => (books, languageCode) => {
               .setColor('#718792')
               .setAction({
                 type: 'uri',
-                label: 'REEEED',
-                uri: book.readerLink
+                label: languageCode === 'th' ? 'ดูหนัง' : 'Watch',
+                uri: movie.viewerLink
               })
               .build()
-            // FlexComponentBuilder.flexButton()
-            //   .setAction({
-            //     'type': 'uri',
-            //     'label': 'MORE',
-            //     'uri': book.link
-            //   })
-            //   .build()
           )
           .build()
       )
@@ -379,52 +389,52 @@ const bookShelf = (imageResizeService) => (books, languageCode) => {
       .setAspectRatio('16:9')
       .setAspectMode('cover')
       .build() as FlexImage)
-      .addBody()
-      .setLayout('vertical')
-      // title
-      .addComponents(
-        FlexComponentBuilder.flexBox()
-          .setLayout('horizontal')
-          .addContents(
-            FlexComponentBuilder.flexText()
-              .setText('  ')
-              // .setWrap(true)
-              .setWeight('bold')
-              .build()
-          )
-          .build()
-      )
-      // teaser
-      .addComponents(
-        FlexComponentBuilder.flexBox()
-          .setMargin('md')
-          .setLayout('horizontal')
-          .addContents(
-            FlexComponentBuilder.flexText()
-              .setText('  ')
-              .setSize('sm')
-              .setWrap(true)
-              .setMaxLines(3)
-              .build()
-          )
-          .build()
-      )
-      // price
-      .addComponents(
-        FlexComponentBuilder.flexBox()
-          .setMargin('md')
-          .setLayout('horizontal')
-          .addContents(
-            FlexComponentBuilder.flexText()
-              .setText('  ')
-              .setWrap(true)
-              .setColor('#222222')
-              .setWeight('bold')
-              .setSize('xs')
-              .build()
-          )
-          .build()
-      )
+    .addBody()
+    .setLayout('vertical')
+    // title
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setLayout('horizontal')
+        .addContents(
+          FlexComponentBuilder.flexText()
+            .setText('  ')
+            // .setWrap(true)
+            .setWeight('bold')
+            .build()
+        )
+        .build()
+    )
+    // teaser
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setMargin('md')
+        .setLayout('horizontal')
+        .addContents(
+          FlexComponentBuilder.flexText()
+            .setText('  ')
+            .setSize('sm')
+            .setWrap(true)
+            .setMaxLines(3)
+            .build()
+        )
+        .build()
+    )
+    // price
+    .addComponents(
+      FlexComponentBuilder.flexBox()
+        .setMargin('md')
+        .setLayout('horizontal')
+        .addContents(
+          FlexComponentBuilder.flexText()
+            .setText('  ')
+            .setWrap(true)
+            .setColor('#222222')
+            .setWeight('bold')
+            .setSize('xs')
+            .build()
+        )
+        .build()
+    )
     .addFooter()
     .setLayout("vertical")
     .addComponents(
@@ -435,15 +445,17 @@ const bookShelf = (imageResizeService) => (books, languageCode) => {
             .setStyle('primary')
             .setColor('#718792')
             .setAction({
-                type: 'uri',
-                label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
-                uri: 'line://app/1599822021-BQbYxmDo'
-              })
+              type: 'uri',
+              label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
+              uri: 'line://app/1599822021-BQbYxmDo'
+            })
             .build(),
         )
         .build()
     )
     .build()
+
+  console.log(JSON.stringify(template.build().contents))
 
   return template.build()
 }
@@ -517,9 +529,9 @@ const quickReply = (message, ...options) => {
 }
 
 export default ({ imageResizeService }) => ({
-  listAllBooks: listAllBooks(imageResizeService),
-  singleBookView: singleBookView(imageResizeService),
-  bookShelf: bookShelf(imageResizeService),
+  listAllMovies: listAllMovies(imageResizeService),
+  singleMovieView: singleMovieView(imageResizeService),
+  movieShelf: movieShelf(imageResizeService),
   messageTemplate,
   makePaymentTemplate,
   quickReply

@@ -1,14 +1,16 @@
-import * as bookListAllHandler from './bookListAllHandler'
-import * as bookPurchaseHandler from './bookPurchaseHandler'
-import * as bookShelfHandler from './bookShelfHandler'
-import * as booksViewHandler from './booksViewHandler'
+import * as moviesListAllHandler from './moviesListAllHandler'
+import * as moviesPrepurchaseHandler from './moviesPrepurchaseHandler'
+import * as moviesPurchaseHandler from './moviesPurchaseHandler'
+import * as moviesMyMoviesHandler from './moviesMyMoviesHandler'
+import * as moviesViewHandler from './moviesViewHandler'
 import * as fallbackHandler from './fallbackHandler'
 
 export {
-  bookListAllHandler,
-  bookPurchaseHandler,
-  bookShelfHandler,
-  booksViewHandler,
+  moviesListAllHandler,
+  moviesPrepurchaseHandler,
+  moviesPurchaseHandler,
+  moviesMyMoviesHandler,
+  moviesViewHandler,
   fallbackHandler
 }
 

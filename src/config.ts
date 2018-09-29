@@ -32,6 +32,7 @@ export const config: IConfig = {
   imageResizeService,
   linepay: pay,
   transactionStore: {},
+  userStore: {},
   linepayConfirmUrl: process.env.LINE_PAY_CONFIRM_URL
 }
 
@@ -44,6 +45,7 @@ export interface IConfig {
   imageResizeService: string,
   linepay: any,
   transactionStore: any,
+  userStore: any,
   linepayConfirmUrl: any
 }
 export interface ILineConfig {

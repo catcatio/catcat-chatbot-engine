@@ -28,14 +28,14 @@ const getUserId = request => {
   }
 }
 
-export const bookshelf = (config) => {
+export const blockbuster = (config) => {
   const lineClient = new Client(config.line)
-  const bookRepository = require('./booksRepository')
+  const moviesRepository = require('./moviesRepository')
   const lineMessageFormatter = require('./messageFormatter/lineMessageFormatter').default(config)
   const intentMap = new Map()
 
   Object.keys(intentHandlers).forEach(key => {
-    intentMap.set(intentHandlers[key].intentName, intentHandlers[key].handler(bookRepository, lineClient, lineMessageFormatter, config))
+    intentMap.set(intentHandlers[key].intentName, intentHandlers[key].handler(moviesRepository, lineClient, lineMessageFormatter, config))
   })
 
   return (request, response) => {
@@ -61,7 +61,7 @@ export const linepayconfirm = (config: IConfig) => {
   const lineClient = new Client(config.line)
   const lineMessageFormatter = require('./messageFormatter/lineMessageFormatter').default(config)
 
-  const { transactionStore, linepay } = config
+  const { transactionStore, linepay, userStore } = config
   return async (request, response) => {
     try {
       const transactionId = request.query.transactionId
@@ -104,22 +104,24 @@ export const linepayconfirm = (config: IConfig) => {
         return 'EVENT_BOOK_ERROR'
       }
 
+      userStore[transaction.userId] = Object.assign({}, {[transaction.movie.id]: true} , userStore[transaction.userId])
+
       await lineClient.pushMessage(transaction.userId, lineMessageFormatter.messageTemplate(
         transaction.languageCode === 'th'
-          ? lineMessageFormatter.quickReply('ขอบคุณที่สนับสนุนผู้เขียน ขอให้สนุกกับการอ่านนะ, อยากอ่านเลยรึเปล่า?', 'ยังก่อน', {
+          ? lineMessageFormatter.quickReply('ขอบคุณที่สนับสนุน GDH ขอให้สนุกกับหนังนะ, อยากรับชมเลยรึเปล่า?', 'ยังก่อน', {
             type: 'action',
             action: {
               type: 'message',
-              label: 'อ่านเลย',
-              text: `อ่านหนังสือ ${transaction.bookTitle}`
+              label: 'ดูเลย',
+              text: `ดูหนัง ${transaction.movieTitle}`
             }
           })
-          : lineMessageFormatter.quickReply('Thanks for purchase! Enjoy! Do you want to read it now', 'Not yet', {
+          : lineMessageFormatter.quickReply('Thanks for purchase! Enjoy! Do you want to watch it now', 'Not yet', {
             type: 'action',
             action: {
               type: 'message',
               label: 'Sure',
-              text: `read book ${transaction.bookTitle}`
+              text: `watch ${transaction.movieTitle}`
             }
           })
       ))

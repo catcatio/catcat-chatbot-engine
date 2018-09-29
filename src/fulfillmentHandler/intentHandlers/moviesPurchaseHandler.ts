@@ -1,8 +1,8 @@
 import { formatCurrency } from '../../utils/formatCurrency';
 
-export const intentName = 'books.purchase - yes'
+export const intentName = 'movies.purchase - yes'
 
-export const handler = (bookRepository, lineClient, lineMessageFormatter, { linepay, linepayConfirmUrl, transactionStore }) =>
+export const handler = (moviesRepository, lineClient, lineMessageFormatter, { linepay, linepayConfirmUrl, transactionStore, userStore }) =>
   async (agent) => {
     console.log(intentName)
     const {
@@ -16,18 +16,24 @@ export const handler = (bookRepository, lineClient, lineMessageFormatter, { line
       queryText,
     } = agent
 
-    const bookTitle = parameters['book-title']
+    const movieTitle = parameters['movie-title']
     await lineClient.pushMessage(userId, lineMessageFormatter.messageTemplate(
       languageCode === 'th'
-      ? 'รอเดี่ยวนะ กำลังดำเนินการสั่งหนังสือให้'
+      ? 'รอเดี่ยวนะ กำลังดำเนินการซื้อหนังให้'
       : 'Please wait while we are processing your order'))
 
-    const book = bookRepository.getBookByTitle(bookTitle)
+    const movie = moviesRepository.getMoviesByTitle(movieTitle)
+
+    if (movie.unitPrice <= 0) {
+      userStore[userId] = Object.assign({}, {[movie.id]: true} , userStore[userId])
+      const m = lineMessageFormatter.singleMovieView(movie)
+      return lineClient.pushMessage(userId, m)
+    }
 
     const reservation: any = {
-      productName: book.title,
-      amount: book.unitPrice,
-      currency: book.unitPriceCurrency,
+      productName: movie.title,
+      amount: movie.unitPrice,
+      currency: movie.unitPriceCurrency,
       confirmUrl: linepayConfirmUrl,
       confirmUrlType: 'SERVER',
       orderId: `${Date.now()}-${userId}`
@@ -47,16 +53,16 @@ export const handler = (bookRepository, lineClient, lineMessageFormatter, { line
       createdDate: Date.now(),
       languageCode: languageCode,
       userId: userId,
-      bookId: book.id,
-      bookTitle: book.title,
+      movieId: movie.id,
+      movieTitle: movie.title,
       requestSource: (requestSource || '').toLowerCase(),
-      book,
-      type: 'book'
+      movie,
+      type: 'movie'
     }
 
     const message = lineMessageFormatter.makePaymentTemplate(
       languageCode === 'th' ? 'การชำระเงิน' : 'Please proceed to the payment',
-      languageCode === 'th' ? `${formatCurrency(book.unitPrice, true)} ${book.unitPriceCurrency} สำหรับหนังสือ "${book.title}" โปรดดำเนินการชำระเงิน` : `${formatCurrency(book.unitPrice, true)} THB for "${book.title}" book. Please proceed to the payment.`,
+      languageCode === 'th' ? `${formatCurrency(movie.unitPrice, true)} ${movie.unitPriceCurrency} สำหรับหนัง "${movie.title}" โปรดดำเนินการชำระเงิน` : `${formatCurrency(movie.unitPrice, true)} THB for "${movie.title}" movie. Please proceed to the payment.`,
      response.info.paymentUrl.web, languageCode)
     return lineClient.pushMessage(userId, message)
   }
