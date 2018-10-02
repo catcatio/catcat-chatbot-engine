@@ -17,7 +17,7 @@ const listAllMovies = (imageResizeService) => (movies, languageCode) => {
         .setSize('full')
         .setAspectRatio('16:9')
         .setAspectMode('cover')
-      .build() as FlexImage)
+        .build() as FlexImage)
       .addBody()
       .setLayout('vertical')
       // title
@@ -120,54 +120,28 @@ const listAllMovies = (imageResizeService) => (movies, languageCode) => {
 
   template.addBubble()
     .addHero(FlexComponentBuilder.flexImage()
-      .setUrl(`${imageResizeService}${encodeURIComponent(`https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Grey_matter_and_white_matter_-_very_high_mag.jpg/1200px-Grey_matter_and_white_matter_-_very_high_mag.jpg`)}&size=1000&seed=${Date.now()}`)
+      .setUrl(`${imageResizeService}${encodeURIComponent(`https://user-images.githubusercontent.com/97060/46278937-ec49f600-c591-11e8-995a-5969a22c7417.png`)}&size=1000&seed=${Date.now()}`)
       // .setUrl('https://media.giphy.com/media/AQktflfHoptNm/source.gif')
       .setSize('full')
-      .setAspectRatio('16:9')
+      .setAspectRatio('1:1')
       .setAspectMode('cover')
       .build() as FlexImage)
     .addBody()
-    .setLayout('vertical')
-    // title
-    .addComponents(
-      FlexComponentBuilder.flexBox()
-        .setLayout('horizontal')
-        .addContents(
-          FlexComponentBuilder.flexText()
-            .setText('  ')
-            // .setWrap(true)
-            .setWeight('bold')
-            .build()
-        )
-        .build()
-    )
-    // teaser
+    .setLayout("vertical")
     .addComponents(
       FlexComponentBuilder.flexBox()
         .setMargin('md')
         .setLayout('horizontal')
         .addContents(
           FlexComponentBuilder.flexText()
-            .setText('  ')
+            .setText(limitChar(`2561 ~ น้อง.พี่.ที่รัก
+2561 ~ BNK48: GIRLS DON’T CRY
+2561 ~ 2,215 เชื่อ บ้า กล้า ก้าว
+2560 ~ เพื่อน..ที่ระลึก
+...และอีก 4 เรื่อง`, 300))
             .setSize('sm')
             .setWrap(true)
-            .setMaxLines(3)
-            .build()
-        )
-        .build()
-    )
-    // price
-    .addComponents(
-      FlexComponentBuilder.flexBox()
-        .setMargin('md')
-        .setLayout('horizontal')
-        .addContents(
-          FlexComponentBuilder.flexText()
-            .setText('  ')
-            .setWrap(true)
-            .setColor('#222222')
-            .setWeight('bold')
-            .setSize('xs')
+            .setMaxLines(5)
             .build()
         )
         .build()
@@ -184,7 +158,7 @@ const listAllMovies = (imageResizeService) => (movies, languageCode) => {
             .setAction({
               type: 'uri',
               label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
-              uri: 'line://app/1599822021-BQbYxmDo'
+              uri: 'line://app/1610804355-qd1eebZ0?page=movieshelf'
             })
             .build(),
         )
@@ -192,10 +166,12 @@ const listAllMovies = (imageResizeService) => (movies, languageCode) => {
     )
     .build()
 
+  console.log(JSON.stringify(template.build().contents))
+
   return template.build()
 }
 
-const singleMovieView = (imageResizeService) => (movie) => {
+const singleMovieView = (imageResizeService) => (movie, languageCode) => {
   const lineTemplate = new FlexMessageBuilder()
   const template = lineTemplate.flexMessage(`single movie`)
     .addBubble()
@@ -262,7 +238,7 @@ const singleMovieView = (imageResizeService) => (movie) => {
             .setColor('#718792')
             .setAction({
               type: 'uri',
-              label: 'Watch Now',
+              label: languageCode === 'th' ? 'ดูเลย' : 'Watch Now',
               uri: movie.viewerLink
             })
             .build()
@@ -384,53 +360,26 @@ const movieShelf = (imageResizeService) => (movies, languageCode) => {
 
   template.addBubble()
     .addHero(FlexComponentBuilder.flexImage()
-      .setUrl(`${imageResizeService}${encodeURIComponent(`https://clip2art.com/images/library-clipart-personal-7.png`)}&size=1000&seed=${Date.now()}`)
+      .setUrl(`${imageResizeService}${encodeURIComponent(`https://user-images.githubusercontent.com/97060/46278937-ec49f600-c591-11e8-995a-5969a22c7417.png`)}&size=1000&seed=${Date.now()}`)
+      // .setUrl('https://media.giphy.com/media/AQktflfHoptNm/source.gif')
       .setSize('full')
       .setAspectRatio('16:9')
       .setAspectMode('cover')
       .build() as FlexImage)
     .addBody()
-    .setLayout('vertical')
-    // title
-    .addComponents(
-      FlexComponentBuilder.flexBox()
-        .setLayout('horizontal')
-        .addContents(
-          FlexComponentBuilder.flexText()
-            .setText('  ')
-            // .setWrap(true)
-            .setWeight('bold')
-            .build()
-        )
-        .build()
-    )
-    // teaser
+    .setLayout("vertical")
     .addComponents(
       FlexComponentBuilder.flexBox()
         .setMargin('md')
         .setLayout('horizontal')
         .addContents(
           FlexComponentBuilder.flexText()
-            .setText('  ')
+            .setText(limitChar(`2561 ~ น้อง.พี่.ที่รัก
+2561 ~ BNK48: GIRLS DON’T CRY
+2561 ~ 2,215 เชื่อ บ้า กล้า ก้าว`, 300))
             .setSize('sm')
             .setWrap(true)
-            .setMaxLines(3)
-            .build()
-        )
-        .build()
-    )
-    // price
-    .addComponents(
-      FlexComponentBuilder.flexBox()
-        .setMargin('md')
-        .setLayout('horizontal')
-        .addContents(
-          FlexComponentBuilder.flexText()
-            .setText('  ')
-            .setWrap(true)
-            .setColor('#222222')
-            .setWeight('bold')
-            .setSize('xs')
+            .setMaxLines(5)
             .build()
         )
         .build()
@@ -447,7 +396,7 @@ const movieShelf = (imageResizeService) => (movies, languageCode) => {
             .setAction({
               type: 'uri',
               label: languageCode === 'th' ? 'ดูทั้งหมด' : 'MORE',
-              uri: 'line://app/1599822021-BQbYxmDo'
+              uri: 'line://app/1610804355-qd1eebZ0?page=movieshelf'
             })
             .build(),
         )
@@ -495,8 +444,8 @@ const makePaymentTemplate = (title, message, paymentLink, languageCode) => {
     .setSpacing('md')
     .addComponents(
       FlexComponentBuilder.flexButton()
-        .setStyle('secondary')
-        .setColor('#b0bec5')
+        .setStyle('primary')
+        .setColor('#718792')
         .setAction({
           'type': 'uri',
           'label': languageCode === 'th' ? 'จ่ายด้วย LINE Pay' : 'Pay by LINE Pay',

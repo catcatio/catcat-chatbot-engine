@@ -26,7 +26,7 @@ export const handler = (moviesRepository, lineClient, lineMessageFormatter, { li
 
     if (movie.unitPrice <= 0) {
       userStore[userId] = Object.assign({}, {[movie.id]: true} , userStore[userId])
-      const m = lineMessageFormatter.singleMovieView(movie)
+      const m = lineMessageFormatter.singleMovieView(movie, languageCode)
       return lineClient.pushMessage(userId, m)
     }
 

@@ -21,7 +21,7 @@ export const handler = (moviesRepository, lineClient, lineMessageFormatter, { us
     const hasPurchased = userStore[userId] && userStore[userId][movie.id]
     let message = null
     if (hasPurchased) {
-      message = lineMessageFormatter.singleMovieView(movie)
+      message = lineMessageFormatter.singleMovieView(movie, languageCode)
     } else {
       message = languageCode === 'th'
         ? lineMessageFormatter.quickReply(`ดู "${movie.title}" ${movie.unitPrice <= 0 ? 'ฟรี' : `ราคา ${movie.unitPrice} ${movie.unitPriceCurrency}`} นะ?`, 'เอาเอา', 'ยังก่อน')
