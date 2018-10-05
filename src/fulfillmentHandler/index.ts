@@ -1,5 +1,6 @@
 import * as intentHandlers from './intentHandlers'
 import { IConfig } from '../config';
+import * as request from 'request-promise-native'
 const { Client } = require('@line/bot-sdk')
 
 const { WebhookClient } = require('dialogflow-fulfillment')
@@ -104,7 +105,7 @@ export const linepayconfirm = (config: IConfig) => {
         return 'EVENT_BOOK_ERROR'
       }
 
-      userStore[transaction.userId] = Object.assign({}, {[transaction.movie.id]: true} , userStore[transaction.userId])
+      userStore[transaction.userId] = Object.assign({}, { [transaction.movie.id]: true }, userStore[transaction.userId])
 
       await lineClient.pushMessage(transaction.userId, lineMessageFormatter.messageTemplate(
         transaction.languageCode === 'th'
@@ -127,6 +128,89 @@ export const linepayconfirm = (config: IConfig) => {
       ))
     } catch (error) {
       console.error(error)
+    }
+  }
+}
+
+export const linelogin = (config: IConfig) => {
+  const { lineLogin, line } = config
+  return async (req, res) => {
+    console.log('linelogin')
+    console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers))
+    console.log('Dialogflow Request query: ' + JSON.stringify(req.query))
+    console.log('Dialogflow Request body: ' + JSON.stringify(req.body))
+    const query = req.query
+    const querystring = require('querystring')
+    try {
+      const form = {
+        grant_type: 'authorization_code',
+        code: req.query.code,
+        redirect_uri: lineLogin.url,
+        client_id: lineLogin.channelId,
+        client_secret: lineLogin.channelSecret
+      };
+
+      const body = querystring.stringify(form);
+      const accessTokenStr = await request({
+        uri: 'https://api.line.me/oauth2/v2.1/token',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body
+      })
+
+      const accessToken = JSON.parse(accessTokenStr)
+      console.log('accessToken', accessToken)
+      console.log('accessToken.id_token', accessToken.id_token)
+      var atob = require('atob');
+      const id = !accessToken.id_token ? [] : accessToken.id_token.split('.', 2).map(t => JSON.parse(atob(t)))
+
+      const profile = await request({
+        uri: 'https://api.line.me/v2/profile',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken.access_token}`
+        },
+        json: true
+      })
+
+      const friendship = await request({
+        uri: 'https://api.line.me/friendship/v1/status',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken.access_token}`
+        },
+        json: true
+      })
+
+      /// HACK: not sure why lineClinet not work here.
+      try {
+        const c = await request({
+          method: 'POST',
+          uri: 'https://api.line.me/v2/bot/message/push',
+          body: JSON.stringify({
+            "messages": [{
+              'type': 'text',
+              'text': 'Thanks for logging in with us via LINE Login'
+            }],
+            "to": profile.userId
+          }),
+          headers: Object.assign({}, {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${line.channelAccessToken}`
+          }),
+        })
+
+        console.log(c)
+      } catch (errr) {
+        console.log(errr.message)
+      }
+      res.send({query, accessToken, id, profile, friendship })
+
+    } catch (err) {
+      console.log(err)
+      res.send(err.message)
     }
   }
 }

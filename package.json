@@ -17,6 +17,7 @@
     "@google-cloud/translate": "^2.1.1",
     "@line/bot-sdk": "^6.2.1",
     "actions-on-google": "^2.3.0",
+    "atob": "^2.1.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -24,7 +25,8 @@
     "dialogflow-fulfillment": "^0.5.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "line-pay": "^1.0.11"
+    "line-pay": "^1.0.11",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "@types/dialogflow": "^0.6.3",
