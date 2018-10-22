@@ -1,4 +1,4 @@
-const { Router } = require('express')
+import { Router } from 'express'
 
 export = (config, { messageHandler, fulfillmentHandler }) => {
   const router = Router()
