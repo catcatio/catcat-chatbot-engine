@@ -10,8 +10,7 @@
     "build": "tsc src/index.ts",
     "tsc": "tsc",
     "test": "mocha test/.",
-    "test:watch": "mocha test/. --watch",
-    "postinstall": "tsc"
+    "test:watch": "mocha test/. --watch"
   },
   "keywords": [],
   "author": "",
