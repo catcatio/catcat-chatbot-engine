@@ -8,5 +8,3 @@ coverage
 
 package-lock.json
 serviceAccountKey.json
-
-lib
