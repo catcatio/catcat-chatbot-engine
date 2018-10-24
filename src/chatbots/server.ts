@@ -2,10 +2,11 @@ import { IConfig } from '../config';
 
 import { Server } from 'http'
 
-export default async (config: IConfig, { messageHandler, fulfillmentHandler }) => {
+export default async (config: IConfig, { messageHandler, fulfillmentHandler }): Promise<IServer> => {
   const initExpress = require('./initExpress')
   const routers = require('./routers')
   let _server: Server
+
   const start = async () => {
     const { app, server } = await initExpress(config)
     _server = server
@@ -23,4 +24,9 @@ export default async (config: IConfig, { messageHandler, fulfillmentHandler }) =
     start,
     stop
   }
+}
+
+export interface IServer {
+  start()
+  stop()
 }
