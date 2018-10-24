@@ -10,7 +10,7 @@ const routers = require('./routers')
   const start = async () => {
     const { app, server } = await initExpress(config)
     _server = server
-    app.use(routers(config, { webhookHandlers, fulfillmentHandlers }))
+    app.use(routers({ webhookHandlers, fulfillmentHandlers }))
     console.log('server started')
   }
 

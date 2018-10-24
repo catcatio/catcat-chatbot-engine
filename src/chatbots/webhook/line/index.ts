@@ -1,15 +1,15 @@
-const initApi = (config, messageHandlerAsync) => {
+const initApi = (lineConfig, messageHandlerAsync) => {
   const { Router } = require('express')
   const { Client, middleware } = require('@line/bot-sdk')
 
   const { json } = require('body-parser')
-  const lineClient = new Client(config)
+  const lineClient = new Client(lineConfig)
   const eventHandlers = require('./eventHandlers')()
   const middlewareWrapper = require('./middlewareWrapper').default
   const responder = require('./responder')
 
   const router = Router()
-  // const lineMiddleware = middlewareWrapper(middleware(config))
+  // const lineMiddleware = middlewareWrapper(middleware(lineConfig))
   const lineMiddleware = middlewareWrapper(json())
 
   router.use(lineMiddleware)
@@ -32,9 +32,9 @@ const initApi = (config, messageHandlerAsync) => {
   return router
 }
 
-export = (config, messageHandlerAsync) => {
+export = (lineConfig, messageHandlerAsync) => {
   try { // lazy loading
-    return initApi(config, messageHandlerAsync)
+    return initApi(lineConfig, messageHandlerAsync)
   } catch (error) {
     console.error(error)
     console.error(error.stack)

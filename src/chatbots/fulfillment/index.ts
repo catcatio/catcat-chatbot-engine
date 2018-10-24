@@ -1,6 +1,4 @@
-import { IConfig } from '../../config';
-
-export = (config: IConfig, fulfillmentHandlers) => {
+export = (fulfillmentHandlers) => {
   const { Router } = require('express')
   const bodyParser = require('body-parser')
   const cookieParser = require('cookie-parser')
@@ -12,7 +10,7 @@ export = (config: IConfig, fulfillmentHandlers) => {
 
   const keys = Object.keys(fulfillmentHandlers)
   keys.forEach(key => {
-    router.use(`/${key}`, fulfillmentHandlers[key](config))
+    router.use(`/${key}`, fulfillmentHandlers[key])
   })
 
   router.use('/', (req, res) => res.status(401).send('hmm..'))
