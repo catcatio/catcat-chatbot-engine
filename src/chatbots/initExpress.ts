@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Server } from 'http'
 
-export = ({ port }) =>
+export default ({ port }) =>
   new Promise<{ app: express.Express, server: Server }>((resolve, reject) => {
     console.log('init express')
     const app = express()

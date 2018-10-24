@@ -1,6 +1,6 @@
-import { IConfig } from '../config'
-import { default as server, IServer } from './server';
+import { IChatServerConfig } from '../config'
+import { default as server, IChatServer } from './server';
 
-export const create = async (config: IConfig, { webhookHandlers, fulfillmentHandlers }): Promise<IServer> => {
-  return server(config, { webhookHandlers, fulfillmentHandlers })
+export default async (config: IChatServerConfig): Promise<IChatServer> => {
+  return server( config )
 }

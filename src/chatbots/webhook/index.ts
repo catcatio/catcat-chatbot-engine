@@ -13,27 +13,20 @@ const getProviders = (source) => {
   return readdirSync(source).filter(d => isDirectory(path.join(source, d)))
 }
 
-export = (webhookProviders) => {
+export = (providerConfigs, messageHandler) => {
   const messageHandlerAsync = (handler) => async (prasedMessage: IParsedMessage, originalMessage: any) => {
     return await handler(prasedMessage, originalMessage) // to ensure messageHandler is a promise
   }
 
   const providers = getProviders(__dirname)
-  const { Router } = require('express')
+  const router = require('express').Router()
 
-  const keys = Object.keys(webhookProviders)
-  const router = Router()
-
-  keys.forEach(key => {
-    const { messageHandler, providerConfigs } = webhookProviders[key]
-
-    providers
-      .filter(provider => providerConfigs[provider])
-      .forEach(provider => {
-        console.log(`init messaging provider: ${provider}`)
-        router.use(`/${key}/${provider}`, wrapLazyRequestHandler(provider, messageHandlerAsync(messageHandler), providerConfigs[provider]))
-      })
-  })
+  providers
+    .filter(provider => providerConfigs[provider])
+    .forEach(provider => {
+      console.log(`init messaging provider: ${provider}`)
+      router.use(`/${provider}`, wrapLazyRequestHandler(provider, messageHandlerAsync(messageHandler), providerConfigs[provider]))
+    })
 
   router.use('/', (req, res) => res.status(401).send('hmm..'))
   return router

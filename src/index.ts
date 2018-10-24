@@ -1,13 +1,14 @@
-import * as chatbots from './chatbots'
+import chatbots from './chatbots'
 
-import { IServer } from './chatbots/server';
+import { IChatbot, IChatServer } from './chatbots/server';
 import { IParsedMessage, MessageType } from './chatbots/webhook/EventType'
-import { IConfig } from './config'
+import { IChatServerConfig } from './config'
 
 export {
   chatbots,
-  IServer,
+  IChatbot,
+  IChatServer,
   IParsedMessage,
   MessageType,
-  IConfig
+  IChatServerConfig
 }
