@@ -32,11 +32,9 @@ const initApi = (config, messageHandlerAsync) => {
   return router
 }
 
-let line = null
-
 export = (config, messageHandlerAsync) => {
   try { // lazy loading
-    return line || (line = initApi(config, messageHandlerAsync))
+    return initApi(config, messageHandlerAsync)
   } catch (error) {
     console.error(error)
     console.error(error.stack)

@@ -1,10 +1,16 @@
 import { Router } from 'express'
 
-export = (config, { messageHandler, fulfillmentHandler }) => {
+export = (config, { webhookHandlers, fulfillmentHandlers }) => {
   const router = Router()
 
   console.log('init routers')
-  messageHandler && router.use(`/webhook`, (req, res) => require(`../webhook`)(config, messageHandler)(req, res))
-  fulfillmentHandler && router.use(`/fulfillment`, (req, res) => require(`../fulfillment`)(config, fulfillmentHandler)(req, res))
+  if (webhookHandlers) {
+    const handler = require('../webhook')(config, webhookHandlers)
+    router.use('/webhook', (req, res) => handler(req, res))
+  }
+  if (fulfillmentHandlers) {
+    const handler = require('../fulfillment')(config, fulfillmentHandlers)
+    router.use('/fulfillment', (req, res) => handler(req, res))
+  }
   return router
 }

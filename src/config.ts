@@ -1,7 +1,6 @@
 export interface IConfig {
   port: number,
-  line?: ILineConfig,
-  providers: string[],
+  chatProviders: string[],
 }
 
 export interface ILineConfig {
