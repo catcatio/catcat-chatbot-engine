@@ -13,6 +13,19 @@ export default async (config: IChatServerConfig): Promise<IChatServer> => {
   const start = async () => {
     express = await initExpress(config)
     express.app.use(botRouter)
+    express.app.use((req, res, next) => {
+      const err = new Error('Not Found')
+      const tmp = err as any
+      tmp.status = 404
+      next(err)
+    })
+
+    express.app.use((err, req, res, next) => {
+      const status = err.status || 500
+      res.status(status)
+      res.send(`${status} ${err.message}`)
+    })
+
     console.log('server started')
     return this
   }
@@ -26,6 +39,7 @@ export default async (config: IChatServerConfig): Promise<IChatServer> => {
   }
 
   const register = async (chatbot: IChatbot) => {
+    console.log(`register bot: ${chatbot.name}`)
     botRouter.use(`/${chatbot.name}`, routers(chatbot))
     return this
   }
