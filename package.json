@@ -7,7 +7,8 @@
     "predev:docker": "npm install",
     "dev:docker": "npm run dev",
     "dev": "nodemon --watch src --ext ts,js,json --exec \"ts-node .\"",
-    "build": "tsc src/index.ts",
+    "prepare": "npm run build",
+    "build": "tsc",
     "tsc": "tsc",
     "test": "mocha test/.",
     "test:watch": "mocha test/. --watch"
