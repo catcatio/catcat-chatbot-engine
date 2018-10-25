@@ -1,5 +1,5 @@
 {
-  "name": "catcat-chatbot-framework",
+  "name": "catcat-chatbot-engine",
   "version": "1.0.1",
   "description": "",
   "main": "lib/index.js",
