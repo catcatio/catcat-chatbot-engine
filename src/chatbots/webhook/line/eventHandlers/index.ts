@@ -19,15 +19,14 @@ export = () => {
       replyToken === 'ffffffffffffffffffffffffffffffff'
   }
 
-  const getUserId = (source) => {
-    return source && source.userId
-      ? source.userId
-      : `???????`
+  const getSource = (source) => {
+    return source || { userId: '????' }
   }
 
   return (event) => {
+    console.log('XXXX', JSON.stringify(event))
     if (isSystemVerificationEvent(event)) return
     const eventHandler = eventHandlers[event.type] || defaultEventHandler.handler()
-    return Object.assign({}, { userId: getUserId(event.source) }, eventHandler(event))
+    return Object.assign({}, getSource(event.source), eventHandler(event))
   }
 }
