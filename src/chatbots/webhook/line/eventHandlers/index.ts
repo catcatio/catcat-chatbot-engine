@@ -20,11 +20,10 @@ export = () => {
   }
 
   const getSource = (source) => {
-    return source || { userId: '????' }
+    return source ? { ...source, sourceType: source.type } : { userId: '????' }
   }
 
   return (event) => {
-    console.log('XXXX', JSON.stringify(event))
     if (isSystemVerificationEvent(event)) return
     const eventHandler = eventHandlers[event.type] || defaultEventHandler.handler()
     return Object.assign({}, getSource(event.source), eventHandler(event))
